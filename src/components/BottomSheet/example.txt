@@ -1,0 +1,29 @@
+const createSketch = () => {
+		navigation.navigate('Sketch');
+		setIsOpen(false);
+		modalRef.current?.close();
+	};
+
+
+const modalRef = useRef<BottomSheet>(null);
+
+const handleSnapPress = useCallback(() => {
+		modalRef.current?.snapToIndex(0);
+		setIsOpen(true);
+	}, []);
+
+const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+
+<BottomSheetComponent
+				bottomSheetRef={modalRef}
+				buttons={[
+					{
+						text: 'teste',
+						icon: <FontAwesome5 name='redo' size={24} color='black' />,
+						onPress: () => console.log('ok'),
+					},
+				]}
+				percentual={'30%'}
+				toggle={isBottomSheetOpen}
+				setIsToggle={setIsBottomSheetOpen}
+			/>
