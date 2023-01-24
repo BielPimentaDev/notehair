@@ -1,5 +1,5 @@
 import { View, Text, FlatList, Image, Pressable } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ProfileInterface } from './types';
 import { profileDatas } from './datas/profileDatas';
 import BiggerText from '../Texts/BiggerText';
@@ -9,8 +9,10 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { propsStackClients } from '../../Routes/Models/ClientsProps';
 
-export default function SearchList() {
+export default function ClientsList() {
 	const navigation = useNavigation<propsStackClients>();
+
+	useEffect(() => {}, []);
 
 	const Profile = ({ data }: { data: ProfileInterface }) => (
 		<Pressable

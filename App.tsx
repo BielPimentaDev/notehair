@@ -9,7 +9,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import Splashscreen from './src/screens/SplashScreen';
 import Draw from './src/screens/Sketch/Draw';
 import { SketchContextProvider } from './src/context/SketchContext';
-import { Test } from './Test';
+import Zoom from './Zoom';
+import Teste from './Teste';
+import { useAuth } from './src/hook/useAuth';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -21,35 +23,33 @@ export default function App() {
 
 	return (
 		<AppContextProvider>
-			<Navigation />
+			<SketchContextProvider>
+				<Navigation />
+			</SketchContextProvider>
 		</AppContextProvider>
 	);
 }
 
 export function Navigation() {
-	// const [splash, setSplash] = useState(true);
-	// setTimeout(() => {
-	// 	console.log('fim splash');
-	// 	setSplash(false);
-	// }, 10000);
+	const [splash, setSplash] = useState(true);
+	setTimeout(() => {
+		setSplash(false);
+	}, 6000);
 
 	const { isAuth } = useContext(AppContext);
+	const { user } = useAuth();
+
 	return (
-		// <NavigationContainer>
-		// 	{splash ? (
-		// 		<Splashscreen />
-		// 	) : (
-		// 		<>
-		// 			{!isAuth && <LoginFlow />}
-		// 			{isAuth && <TabMenu />}
-		// 		</>
-		// 	)}
-		// </NavigationContainer>
-		// <Draw></Draw>
 		<NavigationContainer>
-			<SketchContextProvider>
-				<TabMenu />
-			</SketchContextProvider>
+			{/* <Teste /> */}
+			{splash ? (
+				<Splashscreen />
+			) : (
+				<>
+					{!user && <LoginFlow />}
+					{user && <TabMenu />}
+				</>
+			)}
 		</NavigationContainer>
 	);
 }

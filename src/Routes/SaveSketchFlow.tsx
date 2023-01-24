@@ -42,7 +42,7 @@ export function CreateClientStack() {
 				},
 			}}>
 			<Stack.Screen
-				options={{ headerShown: false }}
+				options={{ headerShown: true, title: 'SALVAR' }}
 				name='Save'
 				component={SaveSketch}
 			/>

@@ -5,8 +5,7 @@ export interface ExtraInputProps {
 	placeholder: string;
 	style?: StyleProp<ViewStyle>;
 	icon?: any;
-	onChange?: any;
 	label?: string;
 }
 
-// export type InputProps = TextInputProps & ExtraInputProps;
+export type InputProps = TextInputProps & ExtraInputProps;

@@ -29,7 +29,7 @@ export default function ColorsModal(props: ColorsModalProps) {
 			{colorsToBeSelected.map((item, index) => {
 				const colorCode = Object.values(item)[0];
 				const clickOnColor = () => {
-					setColorPicked(colorCode);
+					setColorPicked && setColorPicked(colorCode);
 					props.setShowColorModal(false);
 				};
 				return (
@@ -44,6 +44,7 @@ export default function ColorsModal(props: ColorsModalProps) {
 							marginVertical: 10,
 							marginHorizontal: 10,
 							borderWidth: 1,
+							zIndex: 99,
 							borderColor: colorCode == colorPicked ? colors.primary : 'white',
 						}}
 					/>

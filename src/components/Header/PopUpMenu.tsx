@@ -12,20 +12,20 @@ import { useNavigation } from '@react-navigation/native';
 import { propsStackClients } from '../../Routes/Models/ClientsProps';
 
 export const PopUpWraper = styled.View`
-	background-color: white;
 	width: 230px;
 	border-radius: 8px;
 	position: absolute;
-	top: 75px;
+	top: 15px;
 	right: 20px;
-	z-index: 99;
+	z-index: 101;
+	opacity: 1;
 `;
 export const BackgroundStyled = styled.Pressable`
 	flex: 1;
 	width: ${windowWidth}px;
 	height: ${windowHeight}px;
 	background-color: rgba(0, 0, 0, 0);
-	/* background-color: red; */
+
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -49,15 +49,7 @@ export default function PopUpMenu(props: PopUpMenuProps) {
 		<>
 			<PopUpWraper style={{ elevation: 5 }}>
 				{<BackgroundStyled onTouchEnd={() => props.setIsOpen(false)} />}
-				{props.buttons.map((button, index) => {
-					return (
-						<Pressable key={index} onPress={button.action}>
-							<BiggerText style={{ padding: 16, color: button.color }}>
-								{button.text}
-							</BiggerText>
-						</Pressable>
-					);
-				})}
+				<Text style={{ color: 'green' }}>Ola</Text>
 			</PopUpWraper>
 		</>
 	);

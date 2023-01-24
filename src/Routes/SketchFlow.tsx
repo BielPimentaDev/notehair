@@ -30,7 +30,7 @@ export default function SketchFlow() {
 			<Stack.Screen
 				name='SaveSketchFlow'
 				component={SaveSketchFlow}
-				options={{ title: 'SALVAR' }}
+				options={{ headerShown: false }}
 			/>
 		</Stack.Navigator>
 	);

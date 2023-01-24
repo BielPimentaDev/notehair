@@ -5,8 +5,9 @@ import FloatButton from '../../components/Buttons/FloatButton';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import BottomSheetComponent from '../../components/BottomSheet/BottomSheetComponent';
 import { FontAwesome } from '@expo/vector-icons';
+import { Skeleton, SkeletonContainer } from 'react-native-skeleton-component';
 
-const galieries = [0, 1, 2, 3, 4];
+const galeriesMock = [0, 1, 2, 3, 4];
 
 export default function Galeries() {
 	const modalRef = useRef<BottomSheet>(null);
@@ -28,21 +29,23 @@ export default function Galeries() {
 				flex: 1,
 				height: '100%',
 			}}>
-			{galieries.map((item) => {
-				return (
-					<View
-						key={item}
-						style={{
-							width: '28%',
-							height: 100,
-							borderRadius: 8,
-							backgroundColor: colors.gray_3,
-							marginBottom: 16,
-							marginLeft: 16,
-						}}
-					/>
-				);
-			})}
+			<SkeletonContainer>
+				{galeriesMock.map((item) => {
+					return (
+						<Skeleton
+							key={item}
+							style={{
+								width: '28%',
+								height: 100,
+								borderRadius: 8,
+								backgroundColor: colors.gray_3,
+								marginBottom: 16,
+								marginLeft: 16,
+							}}
+						/>
+					);
+				})}
+			</SkeletonContainer>
 			<FloatButton text='Nova foto' onPress={handleSnapPress} />
 			<BottomSheetComponent
 				bottomSheetRef={modalRef}

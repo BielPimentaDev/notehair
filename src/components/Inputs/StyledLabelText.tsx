@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { ExtraInputProps } from './types';
+import { ExtraInputProps, InputProps } from './types';
 
 const InputWraper = styled.View`
 	position: relative;
@@ -26,12 +26,11 @@ const Label = styled.Text`
 	font-size: 14px;
 `;
 
-export default function StyledLabelText(props: ExtraInputProps) {
+export default function StyledLabelText(props: InputProps) {
 	return (
 		<InputWraper style={props.style}>
 			<Label>{props.label}</Label>
 			<StyledInput
-				onChangeText={props.onChange}
 				placeholder={props.placeholder}
 				numberOfLines={1}
 				placeholderTextColor={'#4e4e4e'}

@@ -1,14 +1,6 @@
-import {
-	View,
-	Text,
-	Image,
-	KeyboardAvoidingView,
-	Platform,
-	TextInput,
-} from 'react-native';
+import { Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import MainContainer from '../../../components/Containers/MainContainer';
-import styled from 'styled-components/native';
 import { colors } from '../../../colors';
 import BiggerText from '../../../components/Texts/BiggerText';
 import StyledTextInput from '../../../components/Inputs/StyledTextInput';
@@ -17,25 +9,51 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Checkbox from 'expo-checkbox';
 import MediumText from '../../../components/Texts/MediumText';
 import FlexContainer from '../../../components/Containers/FlexContainer';
-
 import { CheckWraper } from '../../Register/styles';
-
 import {
 	InputsWraper,
 	SelectWraper,
 	StyledPenIcon,
 	StyledProfileImage,
 } from '../../Client/ClientsPages/stylesEditClient';
+import { addDoc, collection, onSnapshot } from 'firebase/firestore';
+import { db } from '../../../config/firebase';
+import { showClients } from '../../../services/showClients';
+import { useAuth } from '../../../hook/useAuth';
 
-export default function NewClient({ navigation }) {
+export default function NewClient() {
 	const [isChecked, setIsChecked] = useState(true);
-	const [name, setName] = useState('Michele Silva');
-	useEffect(() => {
-		navigation.getParent().getParent().setOptions({ headerShown: false });
-		return () => {
-			navigation.getParent().getParent().setOptions({ headerShown: true });
-		};
-	}, []);
+	const [name, setName] = useState('');
+	const [wppNumber, setWppNumber] = useState('');
+	const [birthday, setBirthday] = useState('');
+	const [birthdayMonth, setBirthdayMonth] = useState('');
+	const [returnDate, setReturnDate] = useState('');
+	const [isReturningMonthly, setIsReturningMonthly] = useState<boolean>(true);
+
+	const createNewClient = async () => {
+		const { user } = useAuth();
+		setName('');
+		setWppNumber('');
+		setBirthday('');
+		setBirthdayMonth('');
+		setReturnDate('');
+
+		const sketchsDb = collection(db, 'clients');
+
+		try {
+			await addDoc(sketchsDb, {
+				name,
+				wppNumber,
+				birthday,
+				birthdayMonth,
+				returnDate,
+				isReturningMonthly,
+				userUid: user?.uid,
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
 
 	return (
 		<MainContainer>
@@ -54,8 +72,17 @@ export default function NewClient({ navigation }) {
 						<BiggerText style={{ marginBottom: 12 }}>
 							INFORMAÇÕES BÁSICAS
 						</BiggerText>
-						<StyledTextInput placeholder='Nome' style={{ marginBottom: 8 }} />
-						<StyledTextInput placeholder='WhatsApp' />
+						<StyledTextInput
+							placeholder='Nome'
+							style={{ marginBottom: 8 }}
+							value={name}
+							onChangeText={setName}
+						/>
+						<StyledTextInput
+							placeholder='WhatsApp'
+							value={wppNumber}
+							onChangeText={setWppNumber}
+						/>
 					</InputsWraper>
 
 					<InputsWraper>
@@ -65,11 +92,15 @@ export default function NewClient({ navigation }) {
 						<SelectWraper>
 							<StyledTextInput
 								style={{ marginBottom: 20, marginRight: 10, width: '48%' }}
-								placeholder='14'
+								placeholder='Dia'
+								value={birthday}
+								onChangeText={setBirthday}
 							/>
 							<StyledTextInput
 								style={{ marginBottom: 20, width: '48%' }}
-								placeholder='Dia'
+								placeholder='Mês'
+								value={birthdayMonth}
+								onChangeText={setBirthdayMonth}
 							/>
 						</SelectWraper>
 					</InputsWraper>
@@ -80,7 +111,6 @@ export default function NewClient({ navigation }) {
 								margin: 0,
 								borderRadius: 5,
 							}}
-							// color={'red'}
 							color={colors.primary}
 							value={isChecked}
 							onValueChange={setIsChecked}
@@ -97,7 +127,12 @@ export default function NewClient({ navigation }) {
 
 					<InputsWraper>
 						<BiggerText style={{ marginBottom: 8 }}>RETORNO</BiggerText>
-						<StyledTextInput style={{ marginBottom: 8 }} placeholder='Dia' />
+						<StyledTextInput
+							style={{ marginBottom: 8 }}
+							placeholder='Dia'
+							value={returnDate}
+							onChangeText={setReturnDate}
+						/>
 						<StyledTextInput
 							style={{ marginBottom: 8 }}
 							placeholder='Repetir mensalmente'
@@ -124,8 +159,9 @@ export default function NewClient({ navigation }) {
 				</FlexContainer>
 			</ScrollView>
 			<RegularButton
-				text='Editar'
+				text='Salvar'
 				style={{ position: 'absolute', bottom: 10 }}
+				onPress={createNewClient}
 			/>
 		</MainContainer>
 	);

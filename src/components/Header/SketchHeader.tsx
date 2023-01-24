@@ -1,32 +1,25 @@
-import { View, Text, Pressable } from 'react-native';
-import React, { useState } from 'react';
+import { View, Text, Pressable, StatusBar } from 'react-native';
+import React, { useState, useContext } from 'react';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import BiggerText from '../Texts/BiggerText';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import { propsNavigationStackSketch } from '../../Routes/Models/SketchProps';
-import { windowWidth } from '../../sizes';
+import {
+	propsNavigationStackSketch,
+	propsStackSketch,
+} from '../../Routes/Models/SketchProps';
 import PopUpMenu, { BackgroundStyled, PopUpWraper } from './PopUpMenu';
 import { SketchHeaderProps } from './types';
+import { HeaderWraper, IconsWraper } from './styles';
 import { colors } from '../../colors';
 
 export default function SketchHeader(props: SketchHeaderProps) {
-	const navigation = useNavigation<propsNavigationStackSketch>();
+	const navigation = useNavigation<propsStackSketch>();
 
 	return (
 		<>
-			<View
-				style={{
-					width: windowWidth - 32,
-					height: 55,
-					flexDirection: 'row',
-					marginTop: 50,
-
-					justifyContent: 'space-between',
-					alignItems: 'center',
-					zIndex: 99,
-				}}>
+			<HeaderWraper>
 				<View style={{ flexDirection: 'row' }}>
 					<Ionicons
 						name='arrow-back'
@@ -38,30 +31,24 @@ export default function SketchHeader(props: SketchHeaderProps) {
 						EDITOR
 					</BiggerText>
 				</View>
-				<View
-					style={{
-						flexDirection: 'row',
-
-						width: '30%',
-						justifyContent: 'space-between',
-					}}>
-					<MaterialIcons name='undo' size={24} color='black' />
-					<MaterialIcons name='redo' size={24} color='black' />
+				<IconsWraper>
 					<Entypo
 						name='dots-three-vertical'
 						size={24}
 						color='black'
 						onPress={() => props.setIsOpen(true)}
-						// onPress={() => console.log('ok')}
 					/>
-				</View>
-			</View>
+				</IconsWraper>
+			</HeaderWraper>
 			{props.isOpen && (
 				<PopUpWraper style={{ elevation: 5 }}>
 					{<BackgroundStyled onTouchEnd={() => props.setIsOpen(false)} />}
 					{props.buttons.map((button, index) => {
 						return (
-							<Pressable key={index} onPress={button.action}>
+							<Pressable
+								key={index}
+								onPress={button.action}
+								style={{ backgroundColor: colors.white }}>
 								<BiggerText style={{ padding: 16, color: button.color }}>
 									{button.text}
 								</BiggerText>

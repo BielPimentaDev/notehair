@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
-import { ExtraInputProps } from './types';
+import { ExtraInputProps, InputProps } from './types';
 
 const InputWraper = styled.View`
 	width: 100%;
@@ -22,14 +22,15 @@ const RightIcon = styled.View`
 	top: 15px;
 `;
 
-export default function StyledTextInput(props: ExtraInputProps) {
+export default function StyledTextInput(props: InputProps) {
 	return (
 		<InputWraper style={props.style}>
 			<StyledInput
-				onChangeText={props.onChange}
 				placeholder={props.placeholder}
 				numberOfLines={1}
 				placeholderTextColor={'#B6B6B6'}
+				value={props.value}
+				onChangeText={props.onChangeText}
 			/>
 			<RightIcon>{props.icon}</RightIcon>
 		</InputWraper>

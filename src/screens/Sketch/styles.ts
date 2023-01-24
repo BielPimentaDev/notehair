@@ -1,3 +1,4 @@
+import { windowHeight } from './../../sizes';
 import styled from 'styled-components/native';
 import { windowWidth } from '../../sizes';
 
@@ -13,13 +14,13 @@ export const SketchButton = styled.Pressable`
 `;
 export const SketchWraper = styled.ScrollView`
 	margin-bottom: 10px;
+	z-index: 10;
 	position: relative;
 `;
 
 export const ColorsModalStyled = styled.View`
 	width: 90%;
 	height: 100px;
-	background-color: red;
 	position: absolute;
 	bottom: ${windowWidth * 0.22}px;
 	left: 16px;
@@ -28,5 +29,27 @@ export const ColorsModalStyled = styled.View`
 	flex-direction: row;
 	flex-wrap: wrap;
 	align-items: center;
-	z-index: 100;
+	z-index: 11;
+`;
+
+export const ButtonsWraper = styled.View`
+	flex-direction: row;
+	position: absolute;
+	right: 60px;
+	top: -40px;
+`;
+
+export const GradeImage = styled.Image`
+	width: ${windowWidth}px;
+	height: ${windowHeight}px;
+	position: absolute;
+	opacity: 0.6;
+`;
+
+export const HeadImage = styled.Image`
+	z-index: -99;
+	width: ${windowWidth * 0.65}px;
+	left: 15%;
+	top: 10%;
+	position: absolute;
 `;

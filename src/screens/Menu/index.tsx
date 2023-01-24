@@ -7,6 +7,9 @@ import SmallText from '../../components/Texts/SmallText';
 import { ActionItem, ActionsList, ProfileSection, TextWraper } from './styles';
 import { AppContext } from '../../context/AuthContext';
 import { useContext } from 'react';
+import { useAuth } from '../../hook/useAuth';
+import { getAuth, signOut } from 'firebase/auth';
+import app from '../../config/firebase';
 
 const actionItens = [
 	{
@@ -24,7 +27,11 @@ const actionItens = [
 ];
 
 export default function Menu() {
-	const { logout } = useContext(AppContext);
+	const { user } = useAuth();
+	const auth = getAuth(app);
+	async function logout() {
+		await signOut(auth);
+	}
 	return (
 		<MainContainer>
 			<ProfileSection>
@@ -32,8 +39,8 @@ export default function Menu() {
 					source={require('../../../assets/profiles/genericProfile.png')}
 				/>
 				<TextWraper>
-					<BiggerText style={{ fontSize: 16 }}>José da silva Santos</BiggerText>
-					<SmallText style={{ fontSize: 16 }}>example@example.com</SmallText>
+					<BiggerText style={{ fontSize: 16 }}>{user?.displayName}</BiggerText>
+					<SmallText style={{ fontSize: 16 }}>{user?.email}</SmallText>
 				</TextWraper>
 			</ProfileSection>
 

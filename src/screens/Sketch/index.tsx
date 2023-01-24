@@ -1,25 +1,24 @@
-import { View, Text, Image, Pressable } from 'react-native';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Image } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
 import { colors } from '../../colors';
-import styled from 'styled-components/native';
 import MainContainer from '../../components/Containers/MainContainer';
-import { windowHeight, windowWidth } from '../../sizes';
 import { SketchButton, SketchWraper } from './styles';
 import { sketchIcons } from './helpers';
 import ColorsModal from './ColorsModal';
 import SketchHeader from '../../components/Header/SketchHeader';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import {
-	propsNavigationStackSketch,
+	propsStackSaveSketch,
 	propsStackSketch,
 } from '../../Routes/Models/SketchProps';
 import Draw from './Draw';
 import { SketchContext } from '../../context/SketchContext';
-import FlexContainer from '../../components/Containers/FlexContainer';
+import Zoom from '../../../Zoom';
+import { PopUpButtonsInterface } from '../../components/Header/types';
 
 export default function Sketch() {
-	const { setTypePicked } = useContext(SketchContext);
-	const navigation = useNavigation<propsStackSketch>();
+	const { setTypePicked, currentImageRef } = useContext(SketchContext);
+	const navigation = useNavigation<propsStackSaveSketch>();
 
 	const [isPopUpModalOpen, setIsPopUpModalOpen] = useState(false);
 	useEffect(() => {
@@ -33,43 +32,43 @@ export default function Sketch() {
 	}, []);
 
 	const [iconClicked, setIconChosed] = useState<number>(0);
-
 	const [showColorModal, setShowColorModal] = useState(false);
+
+	const sketchButtons = [
+		{
+			action: () => {
+				setIsPopUpModalOpen(false);
+			},
+			text: 'Deletar',
+			color: colors.alert,
+		},
+		{
+			action: () => {
+				navigation.navigate('SaveStack');
+				setIsPopUpModalOpen(false);
+			},
+			text: 'Salvar ',
+			color: colors.tint,
+		},
+		{
+			action: () => {
+				setIsPopUpModalOpen(false);
+			},
+			text: 'Salvar como',
+			color: colors.tint,
+		},
+	];
 
 	return (
 		<MainContainer>
 			<SketchHeader
 				isOpen={isPopUpModalOpen}
 				setIsOpen={setIsPopUpModalOpen}
-				buttons={[
-					{
-						action: () => {
-							navigation.navigate('SaveSketchFlow');
-							setIsPopUpModalOpen(false);
-						},
-						text: 'Deletar',
-						color: colors.alert,
-					},
-					{
-						action: () => {
-							navigation.navigate('SaveSketchFlow');
-							setIsPopUpModalOpen(false);
-						},
-						text: 'Salvar ',
-						color: colors.tint,
-					},
-					{
-						action: () => {
-							navigation.navigate('SaveSketchFlow');
-							setIsPopUpModalOpen(false);
-						},
-						text: 'Salvar como',
-						color: colors.tint,
-					},
-				]}
+				buttons={sketchButtons}
 			/>
 
 			<Draw />
+
 			{showColorModal && (
 				<ColorsModal
 					setShowColorModal={setShowColorModal}
@@ -88,14 +87,14 @@ export default function Sketch() {
 							onPress={onChoose}
 							key={index}
 							style={{
-								elevation: index == iconClicked ? 0 : 2,
+								elevation: 2,
 								backgroundColor:
-									index == iconClicked ? 'rgba(51, 48, 211, 0.1)' : 'white',
+									index == iconClicked ? colors.primary : 'white',
 							}}>
 							<Image
 								source={item.image}
 								style={{
-									tintColor: iconClicked == index ? colors.primary : 'black',
+									tintColor: iconClicked == index ? 'white' : 'black',
 								}}
 							/>
 						</SketchButton>

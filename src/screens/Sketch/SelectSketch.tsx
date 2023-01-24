@@ -57,6 +57,7 @@ export default function SelectSketch() {
 	return (
 		<MainContainer
 			style={{
+				alignItems: 'baseline',
 				alignContent: 'space-around',
 				justifyContent: 'space-around',
 				flexDirection: 'row',
@@ -75,10 +76,9 @@ export default function SelectSketch() {
 							})
 						}
 						style={{
-							width: windowWidth * 0.4,
-							height: windowWidth * 0.4,
+							width: windowWidth * 0.3,
+							height: windowWidth * 0.3,
 							justifyContent: 'center',
-							alignItems: 'center',
 						}}>
 						<Image
 							source={c.picture}

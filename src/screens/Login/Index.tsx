@@ -14,7 +14,9 @@ import { useContext, useState } from 'react';
 import { TextInput } from 'react-native-gesture-handler';
 import BiggerText from '../../components/Texts/BiggerText';
 import { AppContext } from '../../context/AuthContext';
-import { Text, View } from 'react-native';
+import { Alert, Text, View } from 'react-native';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import app from '../../config/firebase';
 
 const LoginWraper = styled.View`
 	width: 100%;
@@ -25,23 +27,40 @@ const InputsWraper = styled.View`
 	justify-content: space-around;
 	margin-bottom: 20px;
 `;
-
+const auth = getAuth(app);
 export default function Login() {
 	const { token, setToken, login } = useContext(AppContext);
 
+	const [email, setEmail] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
+
+	async function signIn() {
+		try {
+			await signInWithEmailAndPassword(auth, email, password);
+		} catch (error) {
+			console.log(error.message);
+			Alert.alert('Erro ao fazer login');
+		}
+	}
 	return (
 		<MainContainer>
 			<LoginWraper>
 				<InputsWraper>
-					<StyledTextInput placeholder='Email' />
+					<StyledTextInput
+						placeholder='Email'
+						value={email}
+						onChangeText={setEmail}
+					/>
 
 					<StyledTextInput
+						value={password}
+						onChangeText={setPassword}
 						placeholder='Senha'
 						icon={<Feather name='eye-off' size={24} color='black' />}
 					/>
 				</InputsWraper>
 
-				<RegularButton text='Entrar' onPress={login} />
+				<RegularButton text='Entrar' onPress={signIn} />
 
 				<LinkButton text='Esqueceu a senha?' />
 			</LoginWraper>

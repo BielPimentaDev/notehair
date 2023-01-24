@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import MainContainer from '../../components/Containers/MainContainer';
 import StyledTextInput from '../../components/Inputs/StyledTextInput';
 import { Feather } from '@expo/vector-icons';
@@ -10,10 +10,40 @@ import Checkbox from 'expo-checkbox';
 import { useContext, useState } from 'react';
 import { CheckWraper, InputsWraper, LoginWraper } from './styles';
 import { AppContext } from '../../context/AuthContext';
+import {
+	getAuth,
+	createUserWithEmailAndPassword,
+	updateProfile,
+} from 'firebase/auth';
+import app from '../../config/firebase';
+
+const auth = getAuth(app);
 
 export default function Register() {
 	const { token, setToken, login } = useContext(AppContext);
 	const [isChecked, setChecked] = useState(true);
+
+	const [name, setName] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
+
+	async function signUp() {
+		if (email == '' || password == '' || name == '') {
+			Alert.alert('Todos os campos precisam ser preenchidos');
+		}
+		try {
+			await createUserWithEmailAndPassword(auth, email, password);
+			console.log('criado com sucesso');
+			await updateProfile(auth?.currentUser, {
+				displayName: name,
+				photoURL: '',
+			});
+		} catch (error) {
+			console.log(error.message);
+			Alert.alert('Aconteceu um erro');
+		}
+	}
+
 	return (
 		<MainContainer>
 			<LoginWraper>
@@ -23,14 +53,20 @@ export default function Register() {
 				</MediumText>
 
 				<InputsWraper>
-					<StyledTextInput placeholder='Nome' />
-					<StyledTextInput placeholder='Email' />
 					<StyledTextInput
-						placeholder='Senha'
-						icon={<Feather name='eye-off' size={24} color='black' />}
+						placeholder='Nome'
+						value={name}
+						onChangeText={setName}
 					/>
 					<StyledTextInput
-						placeholder='Nova senha'
+						placeholder='Email'
+						value={email}
+						onChangeText={setEmail}
+					/>
+					<StyledTextInput
+						value={password}
+						onChangeText={setPassword}
+						placeholder='Senha'
 						icon={<Feather name='eye-off' size={24} color='black' />}
 					/>
 				</InputsWraper>
@@ -60,7 +96,8 @@ export default function Register() {
 					</MediumText>
 				</CheckWraper>
 
-				<RegularButton text='Cadastrar' onPress={login} />
+				{/* <RegularButton text='Cadastrar' onPress={login} /> */}
+				<RegularButton text='Cadastrar' onPress={signUp} />
 			</LoginWraper>
 		</MainContainer>
 	);
