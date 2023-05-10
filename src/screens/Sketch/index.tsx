@@ -3,12 +3,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import MainContainer from '../../components/Containers/MainContainer';
 import ColorsModal from './components/ColorsModal';
 import SketchHeader from '../../components/Header/SketchHeader';
-import Draw from './Draw';
+
 import { SketchContext } from '../../context/SketchContext';
 import SketchTools from './components/SketchTools';
 import { SketchHeaderButtons } from './helpers/sketchHeaderButtons';
 import { useRemoveHeader } from '../../hook/useRemoveHeader';
 import RegularButton from '../../components/Buttons/RegularButton';
+import { Drawing } from '@shopify/react-native-skia';
+import DrawingArea from './DrawingArea';
 
 export default function Sketch() {
 	useRemoveHeader();
@@ -30,8 +32,7 @@ export default function Sketch() {
 				setIsOpen={setIsPopUpModalOpen}
 				buttons={sketchButtons}
 			/>
-
-			<Draw />
+			<DrawingArea />
 			{showColorModal && (
 				<ColorsModal
 					setShowColorModal={setShowColorModal}

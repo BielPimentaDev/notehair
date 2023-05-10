@@ -1,8 +1,11 @@
 import { SketchContext } from '../../../context/SketchContext';
 import { useState, useContext } from 'react';
+import { pathsAtom, poppedPathsAtom } from '../../../store';
+import { useRecoilState } from 'recoil';
 
 export function useDrawHandler() {
-	const { setPoppeds, setPaths, poppeds, paths } = useContext(SketchContext);
+	const [poppeds, setPoppeds] = useRecoilState<any>(poppedPathsAtom);
+	const [paths, setPaths] = useRecoilState<any>(pathsAtom);
 	const unDoDrawHandler = () => {
 		const newPaths = [...paths];
 		const poppedPath = newPaths.pop();

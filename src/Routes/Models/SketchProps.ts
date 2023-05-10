@@ -13,7 +13,7 @@ export type propsNavigationStackSketch = {
 	Sketch: { pic: any };
 	SaveSketch: undefined;
 	SaveAs: undefined;
-	SaveSketchFlow?: { pic: any };
+	SaveSketchFlow?: { pic: any; position: number };
 };
 export type propsStackSketch =
 	NativeStackNavigationProp<propsNavigationStackSketch>;

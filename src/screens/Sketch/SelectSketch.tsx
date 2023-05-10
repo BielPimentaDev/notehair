@@ -14,22 +14,27 @@ export default function SelectSketch() {
 	const croquis = [
 		{
 			name: 'position 1',
+			position: 1,
 			picture: require('../../../assets/sketchs/head1.png'),
 		},
 		{
 			name: 'position 2',
+			position: 2,
 			picture: require('../../../assets/sketchs/head2.png'),
 		},
 		{
 			name: 'position 3',
+			position: 3,
 			picture: require('../../../assets/sketchs/head3.png'),
 		},
 		{
 			name: 'position 4',
+			position: 4,
 			picture: require('../../../assets/sketchs/head4.png'),
 		},
 		{
 			name: 'position 5',
+			position: 5,
 			picture: require('../../../assets/sketchs/head5.png'),
 		},
 	];
@@ -49,7 +54,7 @@ export default function SelectSketch() {
 						onPress={() =>
 							navigation.navigate('SaveSketchFlow', {
 								screen: 'Sketch',
-								params: { pic: croqui.picture },
+								params: { pic: croqui.picture, position: croqui.position },
 							})
 						}
 						style={{

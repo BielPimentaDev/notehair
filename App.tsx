@@ -7,6 +7,7 @@ import Splashscreen from './src/screens/SplashScreen';
 import { useAuth } from './src/hook/useAuth';
 import { SketchContextProvider } from './src/context/SketchContext';
 import { ClientContextProvider } from './src/context/ClientContext';
+import { RecoilRoot } from 'recoil';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -18,7 +19,9 @@ export default function App() {
 	return (
 		<SketchContextProvider>
 			<ClientContextProvider>
-				<Navigation />
+				<RecoilRoot>
+					<Navigation />
+				</RecoilRoot>
 			</ClientContextProvider>
 		</SketchContextProvider>
 	);
