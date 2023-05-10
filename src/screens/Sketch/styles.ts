@@ -13,13 +13,11 @@ export const SketchButton = styled.Pressable`
 	margin-bottom: 10px;
 `;
 export const SketchWraper = styled.ScrollView`
-	margin-bottom: 10px;
-	z-index: 10;
-	position: relative;
+	/* background-color: red; */
 `;
 
 export const ColorsModalStyled = styled.View`
-	width: 90%;
+	width: 50%;
 	height: 100px;
 	position: absolute;
 	bottom: ${windowWidth * 0.22}px;
@@ -29,21 +27,15 @@ export const ColorsModalStyled = styled.View`
 	flex-direction: row;
 	flex-wrap: wrap;
 	align-items: center;
+	justify-content: center;
 	z-index: 11;
-`;
-
-export const ButtonsWraper = styled.View`
-	flex-direction: row;
-	position: absolute;
-	right: 60px;
-	top: -40px;
 `;
 
 export const GradeImage = styled.Image`
 	width: ${windowWidth}px;
 	height: ${windowHeight}px;
 	position: absolute;
-	opacity: 0.6;
+	opacity: 0.4;
 `;
 
 export const HeadImage = styled.Image`

@@ -5,8 +5,6 @@ import { colors } from '../../colors';
 import { Image, Text, View } from 'react-native';
 import SmallText from '../../components/Texts/SmallText';
 import { ActionItem, ActionsList, ProfileSection, TextWraper } from './styles';
-import { AppContext } from '../../context/AuthContext';
-import { useContext } from 'react';
 import { useAuth } from '../../hook/useAuth';
 import { getAuth, signOut } from 'firebase/auth';
 import app from '../../config/firebase';
@@ -29,6 +27,7 @@ const actionItens = [
 export default function Menu() {
 	const { user } = useAuth();
 	const auth = getAuth(app);
+
 	async function logout() {
 		await signOut(auth);
 	}

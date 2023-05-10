@@ -4,33 +4,12 @@ import MainContainer from '../../components/Containers/MainContainer';
 import RegularButton from '../../components/Buttons/RegularButton';
 import { windowWidth } from '../../sizes';
 import { useNavigation } from '@react-navigation/native';
-import {
-	propsNavigationStackSketch,
-	propsStackSketch,
-} from '../../Routes/Models/SketchProps';
+import { propsStackSelectSketch } from '../../Routes/Models/SketchProps';
+import { useRemoveTabBar } from '../../hook/useRemoveTabBar';
 
 export default function SelectSketch() {
-	const navigation = useNavigation<propsStackSketch>();
-	useEffect(() => {
-		navigation
-			.getParent()
-			?.setOptions({ tabBarStyle: { display: 'none' }, headerShown: false });
-		return () => {
-			navigation.getParent()?.setOptions({
-				tabBarStyle: {
-					height: windowWidth * 0.15,
-					width: '100%',
-					paddingHorizontal: 10,
-					marginVertical: 5,
-					elevation: 0,
-					backgroundColor: 'white',
-					display: 'flex',
-					heigh: 45,
-				},
-				headerShown: true,
-			});
-		};
-	}, []);
+	const navigation = useNavigation<propsStackSelectSketch>();
+	useRemoveTabBar();
 
 	const croquis = [
 		{
@@ -63,16 +42,14 @@ export default function SelectSketch() {
 				flexDirection: 'row',
 				flexWrap: 'wrap',
 			}}>
-			{croquis.map((c, index) => {
+			{croquis.map((croqui, index) => {
 				return (
 					<Pressable
 						key={index}
 						onPress={() =>
 							navigation.navigate('SaveSketchFlow', {
 								screen: 'Sketch',
-								params: {
-									pic: c.picture,
-								},
+								params: { pic: croqui.picture },
 							})
 						}
 						style={{
@@ -81,7 +58,7 @@ export default function SelectSketch() {
 							justifyContent: 'center',
 						}}>
 						<Image
-							source={c.picture}
+							source={croqui.picture}
 							style={{ width: '100%', height: '100%', resizeMode: 'contain' }}
 						/>
 					</Pressable>

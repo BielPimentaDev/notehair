@@ -15,7 +15,6 @@ const StyledButton = styled.TouchableHighlight`
 	border-radius: 26px;
 	height: 50px;
 	width: 100%;
-
 	background-color: ${colors.primary};
 	${(props: ButtonProps) =>
 		props.type == 'outline' &&

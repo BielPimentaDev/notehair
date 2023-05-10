@@ -1,7 +1,9 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View } from 'react-native';
 import { colors } from '../colors';
 import Sketch from '../screens/Sketch';
 import NewClient from '../screens/Sketch/NewClient';
+
 import SaveSketch from '../screens/Sketch/SaveSketch';
 
 export default function SaveSketchFlow() {
@@ -21,7 +23,7 @@ export default function SaveSketchFlow() {
 			/>
 			<Stack.Screen
 				options={{ headerShown: false }}
-				name='SaveStack'
+				name='SaveSketch'
 				component={CreateClientStack}
 			/>
 			<Stack.Screen
@@ -47,7 +49,7 @@ export function CreateClientStack() {
 				component={SaveSketch}
 			/>
 			<Stack.Screen
-				options={{ headerShown: true, title: 'NOVO CLIENTE' }}
+				options={{ headerShown: true, title: 'Novo cliente' }}
 				name='NewClient'
 				component={NewClient}
 			/>

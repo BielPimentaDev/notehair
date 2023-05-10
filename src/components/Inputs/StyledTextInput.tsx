@@ -1,6 +1,8 @@
 import React from 'react';
+import { Pressable } from 'react-native';
 import styled from 'styled-components/native';
 import { colors } from '../../colors';
+import { useToggle } from '../../hook/useToggle';
 import { ExtraInputProps, InputProps } from './types';
 
 const InputWraper = styled.View`
@@ -32,6 +34,7 @@ export default function StyledTextInput(props: InputProps) {
 				value={props.value}
 				onChangeText={props.onChangeText}
 			/>
+
 			<RightIcon>{props.icon}</RightIcon>
 		</InputWraper>
 	);

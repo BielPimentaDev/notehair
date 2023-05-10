@@ -1,12 +1,10 @@
-import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { colors } from '../colors';
 import Client from '../screens/Client';
 import EditClient from '../screens/Client/ClientsPages/EditClient';
-
-import Home from '../screens/Home/Index';
+import TakePicture from '../screens/Client/TakePicture/TakePicture';
 import Search from '../screens/Search';
-import Sketch from '../screens/Sketch';
+import NewClient from '../screens/Sketch/NewClient';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +22,11 @@ export default function ClientsFlow() {
 				component={Search}
 			/>
 			<Stack.Screen
+				options={{ headerShown: true, title: 'NOVO CLIENTE' }}
+				name='NewClient'
+				component={NewClient}
+			/>
+			<Stack.Screen
 				name='Client'
 				component={Client}
 				options={{ headerShown: false }}
@@ -32,6 +35,11 @@ export default function ClientsFlow() {
 				name='EditClient'
 				component={EditClient}
 				options={{ title: 'EDITAR CLIENTE' }}
+			/>
+			<Stack.Screen
+				name='TakePicture'
+				component={TakePicture}
+				options={{ title: 'TIRAR FOTO' }}
 			/>
 		</Stack.Navigator>
 	);

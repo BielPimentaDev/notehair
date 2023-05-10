@@ -4,9 +4,9 @@ import styled from 'styled-components/native';
 import { colors } from '../../colors';
 import { ContainerProps } from './types';
 
-const StyledContainer = styled.View`
+const StyledContainer = styled.SafeAreaView`
 	flex: 1;
-	padding: 8px 24px;
+	padding: 24px 24px;
 	background-color: ${colors.white};
 	justify-content: center;
 	align-items: center;

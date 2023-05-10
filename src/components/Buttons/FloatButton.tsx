@@ -15,8 +15,8 @@ const StyledButton = styled.Pressable`
 	background-color: ${colors.primary};
 	border-radius: 26px;
 	flex-direction: row;
-	width: ${windowWidth > 400 ? windowWidth * 0.45 : windowWidth * 0.55}px;
-	z-index: -1;
+	padding: 0 16px;
+	z-index: 1;
 	position: absolute;
 	bottom: 16px;
 	right: 5px;
@@ -31,11 +31,16 @@ const StyledButtonText = styled.Text`
 	text-align: center;
 `;
 
-export default function FloatButton({ style, text, onPress }: ButtonProps) {
+export default function FloatButton({
+	style,
+	text,
+	onPress,
+	plusIcon = true,
+}: ButtonProps) {
 	return (
 		<StyledButton style={style} onPress={onPress}>
-			<Entypo name='plus' size={24} color='white' />
-			<StyledButtonText allowFontScaling={false}> {text} </StyledButtonText>
+			{plusIcon && <Entypo name='plus' size={24} color='white' />}
+			<StyledButtonText allowFontScaling={false}>{text}</StyledButtonText>
 		</StyledButton>
 	);
 }

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "notehair",
+    "name": "Notehair",
     "slug": "notehair",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,7 +18,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gbrlpimenta.notehair"
     },
     "android": {
       "adaptiveIcon": {
@@ -34,6 +35,18 @@
       "eas": {
         "projectId": "1a4648db-fa8b-43e5-afdd-d347c91c68ad"
       }
-    }
-  }
+    },
+    "expo": {
+      "plugins": [
+        [
+          "expo-image-picker",
+          {
+            "cameraPermission": "Allow Notehair to access your camera."
+          }
+        ]
+      ]
+    },
+    "sdkVersion": "47.0.0"
+  },
+  "name": "notehair"
 }

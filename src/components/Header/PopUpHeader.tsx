@@ -24,7 +24,7 @@ export default function PopUpHeader(props: SketchHeaderProps) {
 					width: windowWidth - 32,
 					height: 55,
 					flexDirection: 'row',
-					marginTop: 50,
+
 					justifyContent: 'space-between',
 					alignItems: 'center',
 					zIndex: 99,
@@ -53,7 +53,10 @@ export default function PopUpHeader(props: SketchHeaderProps) {
 					{<BackgroundStyled onTouchEnd={() => props.setIsOpen(false)} />}
 					{props.buttons.map((button, index) => {
 						return (
-							<Pressable key={index} onPress={button.action}>
+							<Pressable
+								key={index}
+								onPress={button.action}
+								style={{ backgroundColor: colors.white }}>
 								<BiggerText style={{ padding: 16, color: button.color }}>
 									{button.text}
 								</BiggerText>

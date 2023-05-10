@@ -1,41 +1,35 @@
-import { View, Text, Image } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MainContainer from '../../components/Containers/MainContainer';
-import BiggerText from '../../components/Texts/BiggerText';
 import { colors } from '../../colors';
-import { windowHeight, windowWidth } from '../../sizes';
 import {
+	ClientBiggerText,
 	ClientButton,
+	ClientButtonIcon,
 	ClientsButtons,
 	ClientSection,
+	ImageProfile,
+	MapComponent,
 	ProfileWraper,
+	TextProfile,
 } from './styles';
-import ClientsSketchs from './ClientsSketchs';
-import Galeries from './Galeries';
+import ClientsSketchs from './ClientSketchs/ClientsSketchs';
+import Galeries from './Galeries/Galeries';
 import Details from './Details';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import PopUpHeader from '../../components/Header/PopUpHeader';
-
-const buttons = [
-	{
-		name: 'Sketchs',
-		icon: require('../../../assets/mosaic.png'),
-	},
-	{
-		name: 'Galeria',
-		icon: require('../../../assets/icons/collections.png'),
-	},
-	{
-		name: 'Detalhes',
-		icon: require('../../../assets/icons/info.png'),
-	},
-];
-
-interface ComponentsInterface {
-	Sketchs: JSX.Element;
-	Galeria: JSX.Element;
-	Detalhes: JSX.Element;
-}
+import { useRemoveTabBar } from '../../hook/useRemoveTabBar';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
+import {
+	propsNavigationStackClients,
+	propsStackClients,
+} from '../../Routes/Models/ClientsProps';
+import { buttonsProps, ComponentsInterface } from './types/indexTypes';
+import { buttons } from './helpers/indexHelpers';
+import {
+	ClientContext,
+	ClientContextProvider,
+} from '../../context/ClientContext';
+import { getWhere } from '../../services/getWhere';
 
 const selectedButtons: ComponentsInterface = {
 	Sketchs: <ClientsSketchs />,
@@ -43,9 +37,14 @@ const selectedButtons: ComponentsInterface = {
 	Detalhes: <Details />,
 };
 
-function Client({ route, navigation }) {
+function Client() {
+	useRemoveTabBar();
+	const navigation = useNavigation<propsStackClients>();
+	const route = useRoute<RouteProp<propsNavigationStackClients, 'Client'>>();
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [buttonClicked, setButtonClicked] = useState('Sketchs');
+	const [buttonClicked, setButtonClicked] =
+		useState<keyof ComponentsInterface>('Sketchs');
+
 	const popUpButtons = [
 		{
 			text: 'Editar',
@@ -65,25 +64,12 @@ function Client({ route, navigation }) {
 		},
 	];
 
+	const { setclientInfos, setClientId } = useContext(ClientContext);
+
 	useEffect(() => {
-		navigation
-			.getParent()
-			.setOptions({ tabBarStyle: { display: 'none' }, headerShown: false });
-		return () => {
-			navigation.getParent().setOptions({
-				tabBarStyle: {
-					height: windowWidth * 0.15,
-					width: '100%',
-					paddingHorizontal: 10,
-					marginVertical: 5,
-					elevation: 0,
-					backgroundColor: 'white',
-					display: 'flex',
-					heigh: 45,
-				},
-				headerShown: true,
-			});
-		};
+		setClientId(route.params.clientUid);
+
+		setclientInfos(route.params.clientInfo);
 	}, []);
 
 	return (
@@ -94,55 +80,40 @@ function Client({ route, navigation }) {
 				buttons={popUpButtons}
 			/>
 			<ProfileWraper>
-				<Image source={route.params.pic} style={{ width: 70, height: 70 }} />
-				<BiggerText style={{ marginLeft: 16, fontSize: 20 }}>
-					{route.params.name}
-				</BiggerText>
+				<ImageProfile
+					source={require('../../../assets/profiles/genericProfile.png')}
+				/>
+				<TextProfile>{route.params?.name}</TextProfile>
 			</ProfileWraper>
 			<ClientSection>
 				<ClientsButtons>
-					{buttons.map((item, index) => {
+					{buttons.map((item: buttonsProps, index: number) => {
 						return (
 							<ClientButton
 								onPress={() => setButtonClicked(item.name)}
 								key={index}
-								style={{
-									backgroundColor:
-										buttonClicked == item.name
-											? colors.primary_opacity_10
-											: colors.white,
-								}}>
-								<Image
+								buttonClicked={buttonClicked}
+								name={item.name}>
+								<ClientButtonIcon
 									source={item.icon}
 									style={{
 										tintColor:
 											item.name == buttonClicked ? colors.primary : 'black',
-										width: windowWidth * 0.05,
-										height: windowWidth * 0.05,
 									}}
 								/>
-								<BiggerText
-									style={{
-										fontSize: 16,
-										marginLeft: 10,
-
-										color:
-											item.name == buttonClicked ? colors.primary : 'black',
-									}}>
+								<ClientBiggerText
+									allowFontScaling={true}
+									maxFontSizeMultiplier={1.2}
+									buttonClicked={buttonClicked}
+									name={item.name}>
 									{item.name}
-								</BiggerText>
+								</ClientBiggerText>
 							</ClientButton>
 						);
 					})}
 				</ClientsButtons>
 			</ClientSection>
-			<View
-				style={{
-					width: windowWidth,
-					flex: 1,
-				}}>
-				{selectedButtons[buttonClicked]}
-			</View>
+			<MapComponent>{selectedButtons[buttonClicked]}</MapComponent>
 		</MainContainer>
 	);
 }

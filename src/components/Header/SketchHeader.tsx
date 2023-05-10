@@ -13,10 +13,11 @@ import PopUpMenu, { BackgroundStyled, PopUpWraper } from './PopUpMenu';
 import { SketchHeaderProps } from './types';
 import { HeaderWraper, IconsWraper } from './styles';
 import { colors } from '../../colors';
+import { useDrawHandler } from '../../screens/Sketch/hooks/useDrawHandler';
 
 export default function SketchHeader(props: SketchHeaderProps) {
 	const navigation = useNavigation<propsStackSketch>();
-
+	const { reDoDrawHandler, unDoDrawHandler } = useDrawHandler();
 	return (
 		<>
 			<HeaderWraper>
@@ -32,6 +33,20 @@ export default function SketchHeader(props: SketchHeaderProps) {
 					</BiggerText>
 				</View>
 				<IconsWraper>
+					<MaterialIcons
+						name='undo'
+						size={24}
+						color='black'
+						style={{ marginRight: 5 }}
+						onPress={unDoDrawHandler}
+					/>
+					<MaterialIcons
+						name='redo'
+						size={24}
+						color='black'
+						style={{ marginLeft: 15, marginRight: 15 }}
+						onPress={reDoDrawHandler}
+					/>
 					<Entypo
 						name='dots-three-vertical'
 						size={24}

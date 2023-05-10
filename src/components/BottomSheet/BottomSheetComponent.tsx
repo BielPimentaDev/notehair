@@ -43,7 +43,7 @@ export default function BottomSheetComponent(props: BottomSheetCompProps) {
 				onClose={() => props.setIsToggle(false)}
 				index={-1}
 				style={{ zIndex: 99 }}>
-				<BottomSheetView style={{ padding: 17, height: '100%' }}>
+				<BottomSheetView style={{ padding: 17, height: '100%', zIndex: 99 }}>
 					{props.buttons.map((button, index) => {
 						function onPressButton() {
 							button.onPress(),
@@ -53,6 +53,7 @@ export default function BottomSheetComponent(props: BottomSheetCompProps) {
 						return (
 							<StyledPressable
 								style={{
+									zIndex: 10,
 									backgroundColor:
 										index == 0
 											? colors.primary_opacity_10
@@ -64,6 +65,7 @@ export default function BottomSheetComponent(props: BottomSheetCompProps) {
 
 								<BiggerText
 									style={{
+										zIndex: 10,
 										color: index == 0 ? colors.primary : colors.tint,
 										marginLeft: 16,
 									}}>

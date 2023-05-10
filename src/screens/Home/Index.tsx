@@ -1,24 +1,29 @@
-import { View, Pressable, Image, Text } from 'react-native';
 import MainContainer from '../../components/Containers/MainContainer';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import FloatButton from '../../components/Buttons/FloatButton';
 import { colors } from '../../colors';
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import MediumText from '../../components/Texts/MediumText';
 import { useNavigation } from '@react-navigation/native';
-import { propsStackSketch } from '../../Routes/Models/SketchProps';
+import { propsStackSelectSketch } from '../../Routes/Models/SketchProps';
 import BottomSheetComponent from '../../components/BottomSheet/BottomSheetComponent';
 import { BottomSheetButtonInterface } from '../../components/BottomSheet/types';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { MotiView, ScrollView } from 'moti';
-import LinearGradient from 'expo-linear-gradient';
-import { Skeleton, SkeletonContainer } from 'react-native-skeleton-component';
-import { FlatList } from 'react-native-gesture-handler/lib/typescript/components/GestureComponents';
+import Mosaic from './components/Mosaic';
+import { getWhere } from '../../services/getWhere';
+import { useAuth } from '../../hook/useAuth';
 
 function Home() {
-	const navigation = useNavigation<propsStackSketch>();
+	const { user } = useAuth();
+
+	const { returningList: picturesFromClients } = getWhere({
+		databaseCollection: 'galerie',
+		databaseKey: 'userId',
+		equalTo: user?.uid,
+	});
+	const navigation = useNavigation<propsStackSelectSketch>();
 
 	const modalRef = useRef<BottomSheet>(null);
 
@@ -48,39 +53,9 @@ function Home() {
 		setIsOpen(true);
 	}, []);
 
-	const mockPosts = [0, 1, 2, 3, 4];
-
 	return (
 		<MainContainer>
-			<ScrollView
-				style={{ width: '100%', zIndex: -1 }}
-				showsVerticalScrollIndicator={false}>
-				<SkeletonContainer backgroundColor='#E4E4E4'>
-					{mockPosts.map((post, index) => {
-						return (
-							<View
-								key={index}
-								style={{
-									flexDirection: index % 2 == 0 ? 'row' : 'row-reverse',
-									justifyContent: 'space-around',
-									marginBottom: 15,
-								}}>
-								<Skeleton
-									style={{ width: 233, height: 233, borderRadius: 8 }}
-								/>
-								<View style={{ justifyContent: 'space-between' }}>
-									<Skeleton
-										style={{ width: 110, height: 110, borderRadius: 8 }}
-									/>
-									<Skeleton
-										style={{ width: 110, height: 110, borderRadius: 8 }}
-									/>
-								</View>
-							</View>
-						);
-					})}
-				</SkeletonContainer>
-			</ScrollView>
+			<Mosaic picturesFromClients={picturesFromClients} />
 			<BottomSheetComponent
 				bottomSheetRef={modalRef}
 				percentual={'35%'}
@@ -88,7 +63,6 @@ function Home() {
 				toggle={isOpen}
 				setIsToggle={setIsOpen}
 			/>
-
 			<FloatButton onPress={handleSnapPress} text='Novo sketch' />
 		</MainContainer>
 	);

@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert } from 'react-native';
 import MainContainer from '../../components/Containers/MainContainer';
 import StyledTextInput from '../../components/Inputs/StyledTextInput';
 import { Feather } from '@expo/vector-icons';
@@ -7,20 +6,19 @@ import RegularButton from '../../components/Buttons/RegularButton';
 import MediumText from '../../components/Texts/MediumText';
 import { colors } from '../../colors';
 import Checkbox from 'expo-checkbox';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { CheckWraper, InputsWraper, LoginWraper } from './styles';
-import { AppContext } from '../../context/AuthContext';
 import {
 	getAuth,
 	createUserWithEmailAndPassword,
 	updateProfile,
 } from 'firebase/auth';
 import app from '../../config/firebase';
+import PasswordTextInput from '../../components/Inputs/PasswordTextInput';
 
 const auth = getAuth(app);
 
 export default function Register() {
-	const { token, setToken, login } = useContext(AppContext);
 	const [isChecked, setChecked] = useState(true);
 
 	const [name, setName] = useState<string>('');
@@ -31,16 +29,19 @@ export default function Register() {
 		if (email == '' || password == '' || name == '') {
 			Alert.alert('Todos os campos precisam ser preenchidos');
 		}
-		try {
-			await createUserWithEmailAndPassword(auth, email, password);
-			console.log('criado com sucesso');
-			await updateProfile(auth?.currentUser, {
-				displayName: name,
-				photoURL: '',
-			});
-		} catch (error) {
-			console.log(error.message);
-			Alert.alert('Aconteceu um erro');
+		if (auth) {
+			try {
+				await createUserWithEmailAndPassword(auth, email, password);
+				console.log('criado com sucesso');
+
+				await updateProfile(auth.currentUser, {
+					displayName: name,
+					photoURL: '',
+				});
+			} catch (error) {
+				console.log(error);
+				Alert.alert('Aconteceu um erro');
+			}
 		}
 	}
 
@@ -63,7 +64,7 @@ export default function Register() {
 						value={email}
 						onChangeText={setEmail}
 					/>
-					<StyledTextInput
+					<PasswordTextInput
 						value={password}
 						onChangeText={setPassword}
 						placeholder='Senha'
@@ -102,10 +103,3 @@ export default function Register() {
 		</MainContainer>
 	);
 }
-
-const styles = StyleSheet.create({
-	checkbox: {
-		margin: 8,
-		borderRadius: 5,
-	},
-});

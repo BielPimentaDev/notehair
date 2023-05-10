@@ -1,14 +1,6 @@
-import {
-	View,
-	Text,
-	Image,
-	KeyboardAvoidingView,
-	Platform,
-	TextInput,
-} from 'react-native';
+import { Image } from 'react-native';
 import React, { useState } from 'react';
 import MainContainer from '../../../components/Containers/MainContainer';
-import styled from 'styled-components/native';
 import { colors } from '../../../colors';
 import BiggerText from '../../../components/Texts/BiggerText';
 import StyledTextInput from '../../../components/Inputs/StyledTextInput';
@@ -22,14 +14,13 @@ import {
 	SelectWraper,
 	StyledPenIcon,
 	StyledProfileImage,
-} from './stylesEditClient';
+} from './styles';
 
 import { CheckWraper } from '../../Register/styles';
 import StyledLabelText from '../../../components/Inputs/StyledLabelText';
 
 export default function EditClient() {
 	const [isChecked, setIsChecked] = useState(true);
-	const [name, setName] = useState('Michele Silva');
 
 	return (
 		<MainContainer>
@@ -80,7 +71,6 @@ export default function EditClient() {
 								margin: 0,
 								borderRadius: 5,
 							}}
-							// color={'red'}
 							color={colors.primary}
 							value={isChecked}
 							onValueChange={setIsChecked}

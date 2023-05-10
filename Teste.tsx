@@ -1,39 +1,57 @@
-import { useEffect } from 'react';
-import { Image, Text, View, StyleSheet } from 'react-native';
-import { Canvas, useCanvasRef, Circle } from '@shopify/react-native-skia';
-import ImageViewer from 'react-native-image-zoom-viewer';
+import React, { useState, useEffect } from 'react';
+import { Button, Image, View, Platform } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import BiggerText from './src/components/Texts/BiggerText';
 import MainContainer from './src/components/Containers/MainContainer';
-import { MotiView } from 'moti';
-import { windowWidth } from './src/sizes';
-import { SkeletonContainer, Skeleton } from 'react-native-skeleton-component';
+import StyledTextInput from './src/components/Inputs/StyledTextInput';
+import { searchData } from './dataMock';
+import SmallText from './src/components/Texts/SmallText';
+
+type testInterface = {
+	nome: string;
+	idade: string;
+	instagram: string;
+};
+
+const test = [
+	{ nome: 'gabriel', idade: '12', instagram: '@gbrl.pimenta' },
+	{ nome: 'guilherme', idade: '15', instagram: '@guiialves' },
+	{ nome: 'lucs', idade: '18', instagram: '@luks' },
+];
+
+type testKeys = {
+	key: keyof testInterface;
+};
 
 export default function Teste() {
-	const ref = useCanvasRef();
-	const imageRef = ref.current?.makeImageSnapshot();
-	const base64 = imageRef?.encodeToBase64();
+	const [searchText, setSearchText] = useState('');
 
-	const images = [
-		{
-			url: '',
-			props: {
-				source: require('./assets/sketchs/zoom.jpg'),
-			},
-		},
+	const testKeys: testKeys[] = [
+		{ key: 'nome' },
+		{ key: 'idade' },
+		{ key: 'instagram' },
 	];
+
+	const filtredTest = test.filter((item) => {
+		return testKeys.some((key) =>
+			item[key.key].toLowerCase().includes(searchText)
+		);
+	});
+
 	return (
 		<MainContainer>
-			<SkeletonContainer>
-				<Skeleton style={{ width: 100, height: 100 }} />
-			</SkeletonContainer>
+			<StyledTextInput placeholder='Buscar...' onChangeText={setSearchText} />
+			<BiggerText>Teste</BiggerText>
+			<View>
+				{filtredTest.map((item) => {
+					return (
+						<View style={{ alignItems: 'center' }}>
+							<BiggerText>{item.nome}</BiggerText>
+							<SmallText>{item.idade}</SmallText>
+						</View>
+					);
+				})}
+			</View>
 		</MainContainer>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: { flexDirection: 'row', alignItems: 'center', marginBottom: 16 },
-	avatar: { height: 40, width: 40, borderRadius: 0 },
-	textContainer: { flex: 1, marginLeft: 16 },
-	title: { width: '90%', height: 14, borderRadius: 7, marginBottom: 5 },
-	subtitle: { width: '70%', height: 14, borderRadius: 7 },
-	icon: { height: 16, width: 16, borderRadius: 4 },
-});

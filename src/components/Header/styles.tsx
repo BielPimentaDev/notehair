@@ -3,6 +3,7 @@ import { windowWidth } from '../../sizes';
 
 export const HeaderWraper = styled.View`
 	width: ${windowWidth - 32}px;
+
 	height: 55px;
 	flex-direction: row;
 	justify-content: space-between;

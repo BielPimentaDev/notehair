@@ -1,5 +1,5 @@
-import { Image } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { Image, TextInput } from 'react-native';
+import React, { useState } from 'react';
 import MainContainer from '../../../components/Containers/MainContainer';
 import { colors } from '../../../colors';
 import BiggerText from '../../../components/Texts/BiggerText';
@@ -15,46 +15,53 @@ import {
 	SelectWraper,
 	StyledPenIcon,
 	StyledProfileImage,
-} from '../../Client/ClientsPages/stylesEditClient';
-import { addDoc, collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../../../config/firebase';
-import { showClients } from '../../../services/showClients';
-import { useAuth } from '../../../hook/useAuth';
+} from '../../Client/ClientsPages/styles';
+import { useCreateClient } from './useCreateClient';
+import { useNavigation } from '@react-navigation/native';
+import { propsStackSketch } from '../../../Routes/Models/SketchProps';
+import { Picker } from '@react-native-picker/picker';
+import { useRemoveTabBar } from '../../../hook/useRemoveTabBar';
+import { useRemoveHeader } from '../../../hook/useRemoveHeader';
 
 export default function NewClient() {
+	useRemoveTabBar();
+
+	const navigation = useNavigation<propsStackSketch>();
 	const [isChecked, setIsChecked] = useState(true);
-	const [name, setName] = useState('');
-	const [wppNumber, setWppNumber] = useState('');
-	const [birthday, setBirthday] = useState('');
-	const [birthdayMonth, setBirthdayMonth] = useState('');
-	const [returnDate, setReturnDate] = useState('');
-	const [isReturningMonthly, setIsReturningMonthly] = useState<boolean>(true);
 
-	const createNewClient = async () => {
-		const { user } = useAuth();
-		setName('');
-		setWppNumber('');
-		setBirthday('');
-		setBirthdayMonth('');
-		setReturnDate('');
-
-		const sketchsDb = collection(db, 'clients');
-
-		try {
-			await addDoc(sketchsDb, {
-				name,
-				wppNumber,
-				birthday,
-				birthdayMonth,
-				returnDate,
-				isReturningMonthly,
-				userUid: user?.uid,
-			});
-		} catch (error) {
-			console.log(error);
-		}
+	const createNewClientHandler = () => {
+		createNewClient();
+		navigation.goBack();
 	};
 
+	const returningArray = [
+		{ label: 'Repetir mensalmente', value: 'once at month' },
+		{ label: 'Repetir trimestralmente', value: 'once at three months' },
+		{ label: 'Repetir semestralmente', value: 'once at 6 months' },
+	];
+
+	const monthsOfTheYear = [
+		{ label: 'Janeiro', value: 'janeiro' },
+		{ label: 'Fevereiro', value: 'janeiro' },
+		{ label: 'Março', value: 'janeiro' },
+		{ label: 'Abril', value: 'janeiro' },
+		{ label: 'Maio', value: 'maio' },
+		{ label: 'Junho', value: 'junho' },
+		{ label: 'Julho', value: 'julho' },
+		{ label: 'Agosto', value: 'agosto' },
+		{ label: 'Setembro', value: 'setembro' },
+		{ label: 'Outubro', value: 'outubro' },
+		{ label: 'Novembro', value: 'novembro' },
+		{ label: 'Dezembro', value: 'dezembro' },
+	];
+
+	const [returningFrequence, setReturningFrequence] = useState('janeiro');
+	const [birthdayMonth, setBirthdayMonth] = useState(monthsOfTheYear[0].value);
+	const { setClientForm, clientForm, createNewClient } = useCreateClient(
+		returningFrequence,
+		birthdayMonth
+	);
+	const { birthday, name, number, returningDate, instagram } = clientForm;
 	return (
 		<MainContainer>
 			<ScrollView showsVerticalScrollIndicator={false}>
@@ -76,12 +83,22 @@ export default function NewClient() {
 							placeholder='Nome'
 							style={{ marginBottom: 8 }}
 							value={name}
-							onChangeText={setName}
+							onChangeText={(ev) => setClientForm({ ...clientForm, name: ev })}
 						/>
 						<StyledTextInput
 							placeholder='WhatsApp'
-							value={wppNumber}
-							onChangeText={setWppNumber}
+							style={{ marginBottom: 8 }}
+							value={number}
+							onChangeText={(ev) =>
+								setClientForm({ ...clientForm, number: ev })
+							}
+						/>
+						<StyledTextInput
+							placeholder='Instagram'
+							value={instagram}
+							onChangeText={(ev) =>
+								setClientForm({ ...clientForm, instagram: ev })
+							}
 						/>
 					</InputsWraper>
 
@@ -94,14 +111,31 @@ export default function NewClient() {
 								style={{ marginBottom: 20, marginRight: 10, width: '48%' }}
 								placeholder='Dia'
 								value={birthday}
-								onChangeText={setBirthday}
+								onChangeText={(ev) =>
+									setClientForm({ ...clientForm, birthday: ev })
+								}
 							/>
-							<StyledTextInput
-								style={{ marginBottom: 20, width: '48%' }}
-								placeholder='Mês'
-								value={birthdayMonth}
-								onChangeText={setBirthdayMonth}
-							/>
+							<Picker
+								itemStyle={{ backgroundColor: 'red' }}
+								style={{
+									backgroundColor: colors.gray,
+									width: '50%',
+									height: 50,
+								}}
+								selectedValue={birthdayMonth}
+								onValueChange={(itemValue, itemIndex) =>
+									setBirthdayMonth(itemValue)
+								}>
+								{monthsOfTheYear.map((data, index) => {
+									return (
+										<Picker.Item
+											label={data.label}
+											value={data.value}
+											key={index}
+										/>
+									);
+								})}
+							</Picker>
 						</SelectWraper>
 					</InputsWraper>
 
@@ -130,13 +164,32 @@ export default function NewClient() {
 						<StyledTextInput
 							style={{ marginBottom: 8 }}
 							placeholder='Dia'
-							value={returnDate}
-							onChangeText={setReturnDate}
+							value={returningDate}
+							onChangeText={(ev) =>
+								setClientForm({ ...clientForm, returningDate: ev })
+							}
 						/>
-						<StyledTextInput
-							style={{ marginBottom: 8 }}
-							placeholder='Repetir mensalmente'
-						/>
+						<Picker
+							itemStyle={{ backgroundColor: 'red' }}
+							style={{
+								backgroundColor: colors.gray,
+								width: '100%',
+								height: 50,
+							}}
+							selectedValue={birthdayMonth}
+							onValueChange={(itemValue, itemIndex) =>
+								setReturningFrequence(itemValue)
+							}>
+							{returningArray.map((data, index) => {
+								return (
+									<Picker.Item
+										label={data.label}
+										value={data.value}
+										key={index}
+									/>
+								);
+							})}
+						</Picker>
 					</InputsWraper>
 					<CheckWraper style={{ marginBottom: 70 }}>
 						<Checkbox
@@ -161,7 +214,10 @@ export default function NewClient() {
 			<RegularButton
 				text='Salvar'
 				style={{ position: 'absolute', bottom: 10 }}
-				onPress={createNewClient}
+				onPress={createNewClientHandler}
+				// onPress={() => {
+				// 	console.log('mes:', birthdayMonth, 'frequencia:', returningFrequence);
+				// }}
 			/>
 		</MainContainer>
 	);

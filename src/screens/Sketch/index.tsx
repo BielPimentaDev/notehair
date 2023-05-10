@@ -1,63 +1,27 @@
-import { Image } from 'react-native';
+import { Image, Text } from 'react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import { colors } from '../../colors';
 import MainContainer from '../../components/Containers/MainContainer';
-import { SketchButton, SketchWraper } from './styles';
-import { sketchIcons } from './helpers';
-import ColorsModal from './ColorsModal';
+import ColorsModal from './components/ColorsModal';
 import SketchHeader from '../../components/Header/SketchHeader';
-import { useNavigation } from '@react-navigation/native';
-import {
-	propsStackSaveSketch,
-	propsStackSketch,
-} from '../../Routes/Models/SketchProps';
 import Draw from './Draw';
 import { SketchContext } from '../../context/SketchContext';
-import Zoom from '../../../Zoom';
-import { PopUpButtonsInterface } from '../../components/Header/types';
+import SketchTools from './components/SketchTools';
+import { SketchHeaderButtons } from './helpers/sketchHeaderButtons';
+import { useRemoveHeader } from '../../hook/useRemoveHeader';
+import RegularButton from '../../components/Buttons/RegularButton';
 
 export default function Sketch() {
-	const { setTypePicked, currentImageRef } = useContext(SketchContext);
-	const navigation = useNavigation<propsStackSaveSketch>();
+	useRemoveHeader();
+	const {
+		showColorModal,
+		setShowColorModal,
+		isPopUpModalOpen,
+		setIsPopUpModalOpen,
+		zoomIsOn,
+		setZoomIsOn,
+	} = useContext(SketchContext);
 
-	const [isPopUpModalOpen, setIsPopUpModalOpen] = useState(false);
-	useEffect(() => {
-		navigation.getParent();
-		navigation.getParent()?.setOptions({ headerShown: false });
-		return () => {
-			navigation.getParent()?.setOptions({
-				headerShown: true,
-			});
-		};
-	}, []);
-
-	const [iconClicked, setIconChosed] = useState<number>(0);
-	const [showColorModal, setShowColorModal] = useState(false);
-
-	const sketchButtons = [
-		{
-			action: () => {
-				setIsPopUpModalOpen(false);
-			},
-			text: 'Deletar',
-			color: colors.alert,
-		},
-		{
-			action: () => {
-				navigation.navigate('SaveStack');
-				setIsPopUpModalOpen(false);
-			},
-			text: 'Salvar ',
-			color: colors.tint,
-		},
-		{
-			action: () => {
-				setIsPopUpModalOpen(false);
-			},
-			text: 'Salvar como',
-			color: colors.tint,
-		},
-	];
+	const { sketchButtons } = SketchHeaderButtons();
 
 	return (
 		<MainContainer>
@@ -68,39 +32,13 @@ export default function Sketch() {
 			/>
 
 			<Draw />
-
 			{showColorModal && (
 				<ColorsModal
 					setShowColorModal={setShowColorModal}
 					showColorModal={showColorModal}
 				/>
 			)}
-			<SketchWraper horizontal showsHorizontalScrollIndicator={false}>
-				{sketchIcons.map((item, index) => {
-					const onChoose = () => {
-						setIconChosed(index);
-						setTypePicked(item.name);
-					};
-					return (
-						<SketchButton
-							onLongPress={() => setShowColorModal(true)}
-							onPress={onChoose}
-							key={index}
-							style={{
-								elevation: 2,
-								backgroundColor:
-									index == iconClicked ? colors.primary : 'white',
-							}}>
-							<Image
-								source={item.image}
-								style={{
-									tintColor: iconClicked == index ? 'white' : 'black',
-								}}
-							/>
-						</SketchButton>
-					);
-				})}
-			</SketchWraper>
+			<SketchTools />
 		</MainContainer>
 	);
 }

@@ -1,40 +1,62 @@
-import { View, Text, FlatList, Image, Pressable } from 'react-native';
+import {
+	View,
+	Text,
+	FlatList,
+	Image,
+	Pressable,
+	ActivityIndicator,
+} from 'react-native';
 import React from 'react';
-import { ProfileInterface } from './types';
-import { profileDatas } from './datas/profileDatas';
 import BiggerText from '../Texts/BiggerText';
 import SmallText from '../Texts/SmallText';
 import { windowWidth } from '../../sizes';
-import { TouchableHighlight } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { propsStackClients } from '../../Routes/Models/ClientsProps';
 
-export default function SearchList() {
-	const navigation = useNavigation<propsStackClients>();
+import { colors } from '../../colors';
+import { getWhere } from '../../services/getWhere';
+import { useAuth } from '../../hook/useAuth';
+import { IClient } from '../../screens/Client/types/models';
 
-	const Profile = ({ data }: { data: ProfileInterface }) => (
+export interface ProfileProps {
+	data: IClient;
+	id: string;
+}
+
+function Profile({ data }: { data: ProfileProps }) {
+	const navigation = useNavigation<propsStackClients>();
+	return (
 		<Pressable
 			onPress={() =>
-				navigation.navigate('Client', { name: data.name, pic: data.profilePic })
+				navigation.navigate('Client', {
+					name: data.data.name,
+					pic: '',
+					clientUid: data.id,
+					clientInfo: data,
+				})
 			}
 			style={{ flexDirection: 'row', marginVertical: 10 }}>
 			<Image
-				source={data.profilePic}
+				source={require('../../../assets/profiles/genericProfile.png')}
 				style={{ width: windowWidth / 8, height: windowWidth / 8 }}
 			/>
 			<View style={{ marginLeft: 10 }}>
-				<BiggerText style={{ fontSize: 16 }}>{data.name}</BiggerText>
-				<SmallText>{data.subtitle}</SmallText>
+				<BiggerText style={{ fontSize: 16 }}>{data.data.name}</BiggerText>
+				<SmallText>{15}</SmallText>
 			</View>
 		</Pressable>
 	);
+}
 
+interface SearchListProps {
+	dataProps: ProfileProps[];
+}
+
+export default function SearchList({ dataProps }: SearchListProps) {
 	return (
-		<View>
-			<FlatList
-				data={profileDatas}
-				renderItem={({ item }) => <Profile data={item} />}
-			/>
-		</View>
+		<FlatList
+			data={dataProps}
+			renderItem={({ item }) => <Profile data={item} />}
+		/>
 	);
 }

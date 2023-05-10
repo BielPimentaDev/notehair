@@ -1,5 +1,5 @@
-import { Image, Text, View, ImageBackground } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { ImageBackground } from 'react-native';
+import React, { useRef, useState } from 'react';
 import {
 	Gesture,
 	GestureDetector,
@@ -7,9 +7,6 @@ import {
 } from 'react-native-gesture-handler';
 import MainContainer from './src/components/Containers/MainContainer';
 import { windowHeight, windowWidth } from './src/sizes';
-
-import ImageViewer from 'react-native-image-zoom-viewer';
-import styled from 'styled-components/native';
 import { colors } from './src/colors';
 
 export default function Zoom() {
@@ -29,9 +26,7 @@ export default function Zoom() {
 
 	const pan = Gesture.Pan()
 		.runOnJS(true)
-		.onStart((g) => {
-			console.log('start');
-		})
+		.onStart((g) => {})
 		.onUpdate((g) => {
 			setMoveX(g.x - 30);
 			setMoveY(g.y - 30);

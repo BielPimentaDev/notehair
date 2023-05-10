@@ -11,9 +11,12 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { propsStackSaveSketch } from '../../../Routes/Models/SketchProps';
+import SelectClient from '../components/SelectClient';
 
 export default function SaveSketch() {
-	const navigation = useNavigation();
+	const navigation = useNavigation<propsStackSaveSketch>();
+
 	return (
 		<MainContainer>
 			<RegularButton
@@ -31,7 +34,7 @@ export default function SaveSketch() {
 				icon={<Ionicons name='search-sharp' size={24} color='black' />}
 			/>
 			<FlexContainer>
-				<SearchList />
+				<SelectClient />
 			</FlexContainer>
 		</MainContainer>
 	);

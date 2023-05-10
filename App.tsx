@@ -1,17 +1,12 @@
-import MainContainer from './src/components/Containers/MainContainer';
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useFonts } from 'expo-font';
 import TabMenu from './src/Routes/TabMenu';
-import { AppContext, AppContextProvider } from './src/context/AuthContext';
 import LoginFlow from './src/Routes/LoginFlow';
-import { ActivityIndicator, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Splashscreen from './src/screens/SplashScreen';
-import Draw from './src/screens/Sketch/Draw';
-import { SketchContextProvider } from './src/context/SketchContext';
-import Zoom from './Zoom';
-import Teste from './Teste';
 import { useAuth } from './src/hook/useAuth';
+import { SketchContextProvider } from './src/context/SketchContext';
+import { ClientContextProvider } from './src/context/ClientContext';
 
 export default function App() {
 	const [fontsLoaded] = useFonts({
@@ -20,13 +15,12 @@ export default function App() {
 		inter: require('./assets/fonts/Inter-Regular.ttf'),
 		'inter-medium': require('./assets/fonts/Inter-Medium.ttf'),
 	});
-
 	return (
-		<AppContextProvider>
-			<SketchContextProvider>
+		<SketchContextProvider>
+			<ClientContextProvider>
 				<Navigation />
-			</SketchContextProvider>
-		</AppContextProvider>
+			</ClientContextProvider>
+		</SketchContextProvider>
 	);
 }
 
@@ -34,14 +28,10 @@ export function Navigation() {
 	const [splash, setSplash] = useState(true);
 	setTimeout(() => {
 		setSplash(false);
-	}, 6000);
-
-	const { isAuth } = useContext(AppContext);
+	}, 4000);
 	const { user } = useAuth();
-
 	return (
 		<NavigationContainer>
-			{/* <Teste /> */}
 			{splash ? (
 				<Splashscreen />
 			) : (
