@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 import { Canvas } from '@shopify/react-native-skia';
 
@@ -6,12 +6,11 @@ import { useRecoilValue } from 'recoil';
 
 import Actual from './components/Actual';
 import Temp from './components/Temp';
-
-import { pathsAtom1, tempPathsAtom1 } from '../../../../store';
+import { pathsAtom, tempPathsAtom } from '../../../../store';
 
 const Draw: React.FC = () => {
-	const path = useRecoilValue(pathsAtom1);
-	const tempPaths = useRecoilValue(tempPathsAtom1);
+	const path = useRecoilValue(pathsAtom);
+	const tempPaths = useRecoilValue(tempPathsAtom);
 
 	return (
 		<Canvas style={{ flex: 8 }}>
@@ -21,4 +20,4 @@ const Draw: React.FC = () => {
 	);
 };
 
-export default Draw;
+export default memo(Draw);

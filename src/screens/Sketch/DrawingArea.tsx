@@ -8,10 +8,10 @@ import {
 } from 'react-native-gesture-handler';
 
 import { useRecoilState } from 'recoil';
-import { pathsAtom, tempPathsAtom } from '../../store';
 
 import GestureHandler from './components/GestureHandler';
 import { SketchContext } from '../../context/SketchContext';
+import { pathsAtom, tempPathsAtom } from '../../store';
 
 const DrawingArea: React.FC = () => {
 	const [pathsState, setPathsState] = useRecoilState<any>(pathsAtom);
@@ -19,8 +19,8 @@ const DrawingArea: React.FC = () => {
 	const [tempPathsState, setTempPathsState] =
 		useRecoilState<any>(tempPathsAtom);
 
-	// const scale = useSharedValue(1);
-	const scale = new Animated.Value(1);
+	const scale = useSharedValue(1);
+	// const scale = new Animated.Value(1);
 	const [savedScale, setSavedValue] = useState(1);
 
 	const [enablePan, setEnablePan] = useState(true);
@@ -33,11 +33,7 @@ const DrawingArea: React.FC = () => {
 
 	const onUpdatePinch = useCallback(
 		(e: PinchGestureHandlerEventPayload) => {
-			Animated.timing(scale, {
-				duration: 1,
-				toValue: savedScale * e.scale,
-				useNativeDriver: true,
-			}).start();
+			scale.value = e.scale * savedScale;
 		},
 		[savedScale]
 	);
