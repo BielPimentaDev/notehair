@@ -3,9 +3,9 @@ import React, { memo } from 'react';
 import { Path } from '@shopify/react-native-skia';
 
 interface IPath {
-	segments: string[];
+	segments: string;
 	color?: string;
-	date: Date;
+	id: number;
 	blend?: any;
 }
 
@@ -18,8 +18,8 @@ const Actual: React.FC<Props> = ({ path }: Props) => {
 		<>
 			{path.map((p: IPath) => (
 				<Path
-					key={`${p.date}`}
-					path={p.segments.join(' ')}
+					key={`${p.id}`}
+					path={p.segments}
 					strokeWidth={5}
 					style='stroke'
 					blendMode={p.blend}

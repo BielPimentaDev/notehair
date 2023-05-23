@@ -54,7 +54,7 @@ const GestureHandler: React.FC<Props> = ({
 						width: useWindowDimensions().width,
 						height: (useWindowDimensions().height * 70) / 100,
 						backgroundColor: '#fff',
-						transform: [{ scale: scale.value }],
+						transform: [{ scale: scale }],
 					}}>
 					<Draw />
 				</Animated.View>

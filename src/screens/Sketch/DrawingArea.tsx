@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import { Button, SafeAreaView, Animated } from 'react-native';
 
 import { useSharedValue } from 'react-native-reanimated';
@@ -19,7 +25,7 @@ const DrawingArea: React.FC = () => {
 	const [tempPathsState, setTempPathsState] =
 		useRecoilState<any>(tempPathsAtom);
 
-	const scale = useSharedValue(1);
+	const scale = useRef(new Animated.Value(1)).current;
 	// const scale = new Animated.Value(1);
 	const [savedScale, setSavedValue] = useState(1);
 
@@ -33,7 +39,7 @@ const DrawingArea: React.FC = () => {
 
 	const onUpdatePinch = useCallback(
 		(e: PinchGestureHandlerEventPayload) => {
-			scale.value = e.scale * savedScale;
+			scale.setValue(e.scale * savedScale);
 		},
 		[savedScale]
 	);
@@ -49,9 +55,10 @@ const DrawingArea: React.FC = () => {
 				return [
 					...prevState,
 					{
-						segments: [`M ${e.x} ${e.y}`],
+						id: `${Math.floor(Math.random() * (999 - 100) + 100)}`,
+						segments: `M ${e.x} ${e.y}`,
 						color: colorPicked,
-						date: new Date(),
+
 						blend: erase ? 'clear' : undefined,
 					},
 				];
@@ -74,7 +81,7 @@ const DrawingArea: React.FC = () => {
 				const newState = JSON.parse(JSON.stringify(prevState));
 
 				if (newState?.[index]?.segments) {
-					newState[index].segments.push(`L ${e.x} ${e.y}`);
+					newState[index].segments += `L ${e.x} ${e.y}`;
 					return [...newState];
 				}
 
@@ -93,6 +100,7 @@ const DrawingArea: React.FC = () => {
 	}, [tempPathsState]);
 
 	const handleErase = () => {
+		console.log(erase);
 		setErase((prevState) => !prevState);
 	};
 
